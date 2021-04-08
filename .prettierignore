@@ -1,0 +1,10 @@
+# Transpiled code base
+dist
+# Dependencies
+node_modules
+
+package-lock.json
+
+tsconfig.json
+
+.eslintrc.js

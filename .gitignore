@@ -1,0 +1,6 @@
+# Transpiled code base
+dist
+# Dependencies
+node_modules
+
+output/**/*.csv
