@@ -7,10 +7,13 @@ import { IRealEstateConfiguration } from "../interfaces/IRealEstateConfiguration
 import { Workbooks } from "../enums/workbookPaths";
 import { Headers } from "../enums/headers";
 import { TimeSlotController } from "./TimeSlotController";
+import { ICapacity } from "../interfaces/ICapacity";
 
 // random.use(seedrandom(Config.SEED));
 
 export class CapacityController {
+  constructor(private relationalConfigurations: IRealEstateConfiguration[]) {}
+
   public calculateRandomCapacity(): number {
     let capacity = 1;
     // 20% of the time capacity will be bigger than the minimum
@@ -24,21 +27,19 @@ export class CapacityController {
     return capacity;
   }
 
-  public async createCapacities(
-    relationalConfigurations: IRealEstateConfiguration[]
-  ): Promise<{ id: number; capacity: number }[]> {
+  public async createCapacities(): Promise<ICapacity[]> {
     const reader = new Reader();
     const writer = new Writer(Workbooks.CAPACITY);
     writer.createHeaders(Headers.CAPACITY);
-    const id = 1;
-    const capacities: { id: number; capacity: number }[] = [];
+    let id = 1;
+    const capacities: ICapacity[] = [];
     console.log("Generating capacity data ...");
     /**
      * Iterate through all real estate configurations and
      * create capacity configurations for all sensors.
      */
     // eslint-disable-next-line no-restricted-syntax
-    for (const configuration of relationalConfigurations) {
+    for (const configuration of this.relationalConfigurations) {
       const capacity = this.calculateRandomCapacity();
       // eslint-disable-next-line no-await-in-loop
       const activeFromDates = await TimeSlotController.getRandomActiveFrom(
@@ -67,7 +68,7 @@ export class CapacityController {
         id,
         capacity,
       });
-
+      id += 1;
       writer.writeRow(rowData.toString());
     }
 
