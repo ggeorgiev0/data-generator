@@ -1,4 +1,4 @@
-export interface IRealEstateConfiguration {
+export default interface IRealEstateConfiguration {
   regionId: number;
   siteId: number;
   buildingId: number;

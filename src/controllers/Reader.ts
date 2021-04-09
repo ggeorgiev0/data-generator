@@ -1,6 +1,6 @@
 import { Workbook, Worksheet } from "exceljs";
 
-export class Reader {
+export default class Reader {
   public workbook = new Workbook();
 
   public readWorkbook(filePath: string): Promise<Worksheet> {

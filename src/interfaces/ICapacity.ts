@@ -1,4 +1,4 @@
-export interface ICapacity {
+export default interface ICapacity {
   id: number;
   capacity: number;
 }

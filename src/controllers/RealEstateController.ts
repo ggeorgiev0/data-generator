@@ -1,13 +1,13 @@
 import fs from "fs";
 import random from "random";
-import { IRealEstateConfiguration } from "../interfaces/IRealEstateConfiguration";
 // import seedrandom from 'seedrandom';
+import IRealEstateConfiguration from "../interfaces/IRealEstateConfiguration";
+import IRelationalStructure from "../interfaces/IRelationalStructure";
 // import { Config } from '../enums/config';
-import { IRelationalStructure } from "../interfaces/IRelationalStructure";
 
 // random.use(seedrandom(Config.SEED));
 
-export class RealEstateController {
+export default class RealEstateController {
   private readJsonConfiguration(): Promise<IRelationalStructure> {
     let pathToJson: fs.PathLike;
     if (!process.argv[2]) {

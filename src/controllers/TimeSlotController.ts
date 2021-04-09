@@ -1,8 +1,8 @@
 import { Workbooks } from "../enums/workbookPaths";
-import { ITimeSlotConfiguration } from "../interfaces/ITimeSlotConfiguration";
-import { Reader } from "./Reader";
+import Reader from "./Reader";
+import ITimeSlotConfiguration from "../interfaces/ITimeSlotConfiguration";
 
-export class TimeSlotController {
+export default class TimeSlotController {
   public static async getRandomActiveFrom(
     reader: Reader
   ): Promise<(string | undefined)[]> {

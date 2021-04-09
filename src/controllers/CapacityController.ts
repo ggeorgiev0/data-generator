@@ -1,17 +1,17 @@
 import random from "random";
 // import seedrandom from 'seedrandom';
-import { Writer } from "./Writer";
-import { Reader } from "./Reader";
-import { Config } from "../enums/config";
-import { IRealEstateConfiguration } from "../interfaces/IRealEstateConfiguration";
+import Writer from "./Writer";
+import Reader from "./Reader";
+import TimeSlotController from "./TimeSlotController";
+import ICapacity from "../interfaces/ICapacity";
+import IRealEstateConfiguration from "../interfaces/IRealEstateConfiguration";
 import { Workbooks } from "../enums/workbookPaths";
 import { Headers } from "../enums/headers";
-import { TimeSlotController } from "./TimeSlotController";
-import { ICapacity } from "../interfaces/ICapacity";
+import { Config } from "../enums/config";
 
 // random.use(seedrandom(Config.SEED));
 
-export class CapacityController {
+export default class CapacityController {
   constructor(private relationalConfigurations: IRealEstateConfiguration[]) {}
 
   public calculateRandomCapacity(): number {

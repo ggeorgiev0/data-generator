@@ -1,14 +1,14 @@
 import random from "random";
 // import seedrandom from 'seedrandom';
-import { Reader } from "./Reader";
-import { Writer } from "./Writer";
-import { TimeSlotController } from "./TimeSlotController";
-import { Config } from "../enums/config";
-import { IRealEstateConfiguration } from "../interfaces/IRealEstateConfiguration";
-import { IHeadcount } from "../interfaces/IHeadcount";
+import Reader from "./Reader";
+import Writer from "./Writer";
+import TimeSlotController from "./TimeSlotController";
+import IRealEstateConfiguration from "../interfaces/IRealEstateConfiguration";
+import IHeadcount from "../interfaces/IHeadcount";
+import ICapacity from "../interfaces/ICapacity";
 import { Workbooks } from "../enums/workbookPaths";
 import { Headers } from "../enums/headers";
-import { ICapacity } from "../interfaces/ICapacity";
+import { Config } from "../enums/config";
 
 // random.use(seedrandom(seed));
 

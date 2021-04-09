@@ -2,14 +2,14 @@
 import random from "random";
 import ProgressBar from "progress";
 // import seedrandom from 'seedrandom';
-import { Writer } from "./Writer";
-import { Config } from "../enums/config";
-import { IRealEstateConfiguration } from "../interfaces/IRealEstateConfiguration";
-import { IHeadcount } from "../interfaces/IHeadcount";
+import Writer from "./Writer";
+import IRealEstateConfiguration from "../interfaces/IRealEstateConfiguration";
+import IHeadcount from "../interfaces/IHeadcount";
+import ICapacity from "../interfaces/ICapacity";
+import ITimeSlotConfiguration from "../interfaces/ITimeSlotConfiguration";
 import { Workbooks } from "../enums/workbookPaths";
 import { Headers } from "../enums/headers";
-import { ICapacity } from "../interfaces/ICapacity";
-import { ITimeSlotConfiguration } from "../interfaces/ITimeSlotConfiguration";
+import { Config } from "../enums/config";
 
 // random.use(seedrandom(seed));
 

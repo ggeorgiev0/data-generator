@@ -1,4 +1,4 @@
-export interface IRelationalStructure {
+export default interface IRelationalStructure {
   regions: IRegion[];
   departments: IDepartment[];
   space_types: ISpaceType[];
