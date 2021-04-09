@@ -34,6 +34,7 @@
     ]
   },
   "devDependencies": {
+    "@types/progress": "^2.0.3",
     "@types/seedrandom": "^3.0.0",
     "@typescript-eslint/eslint-plugin": "^4.21.0",
     "@typescript-eslint/parser": "^4.21.0",
