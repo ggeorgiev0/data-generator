@@ -18,7 +18,7 @@ export default class HeadcountController {
     private relationalConfigurations: IRealEstateConfiguration[]
   ) {}
 
-  private calculateRandomHeadcount(capacity: number | undefined): number {
+  private calculateRandomHeadcount(capacity: number): number {
     let headcount = 1;
     if (capacity) {
       headcount =
@@ -33,7 +33,7 @@ export default class HeadcountController {
   }
 
   private calculateRandomVisitorHeadcount(
-    capacity: number | undefined,
+    capacity: number,
     employeeHeadcount: number
   ): number {
     let visitorHeadcount = 0;
@@ -49,48 +49,45 @@ export default class HeadcountController {
     writer.createHeaders(Headers.HEADCOUNT);
     let id = 1;
     const headcounts: IHeadcount[] = [];
-    // eslint-disable-next-line no-restricted-syntax
-    for (const configuration of this.relationalConfigurations) {
-      const index = this.relationalConfigurations.indexOf(configuration);
-      // eslint-disable-next-line no-await-in-loop
+    this.relationalConfigurations.forEach(async (configuration, index) => {
       const activeFromDates = await TimeSlotController.getRandomActiveFrom(
         reader
       );
       const capacity = this.capacities[index]?.capacity;
-      const assignedHeadcount = this.calculateRandomHeadcount(capacity);
-      const visitorHeadcount = this.calculateRandomVisitorHeadcount(
-        capacity,
-        assignedHeadcount
-      );
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      const activeFrom = activeFromDates[
-        random.int(0, activeFromDates.length - 1)
-      ]!;
-      const activeTill = "";
-
-      const rowData: (number | string)[] = [
-        id,
-        configuration.regionId,
-        configuration.siteId,
-        configuration.buildingId,
-        configuration.floorId,
-        configuration.zoneId,
-        configuration.spaceId,
-        configuration.sensorId,
-        visitorHeadcount,
-        assignedHeadcount,
-        activeFrom,
-        activeTill,
-      ];
-      headcounts.push({
-        id,
-        assignedHeadcount,
-        visitorHeadcount,
-      });
-      id += 1;
-      writer.writeRow(rowData.toString());
-    }
-
+      if (capacity) {
+        const assignedHeadcount = this.calculateRandomHeadcount(capacity);
+        const visitorHeadcount = this.calculateRandomVisitorHeadcount(
+          capacity,
+          assignedHeadcount
+        );
+        const activeFrom =
+          activeFromDates[random.int(0, activeFromDates.length - 1)];
+        const activeTill = "";
+        if (activeFrom) {
+          const rowData: (number | string)[] = [
+            id,
+            configuration.regionId,
+            configuration.siteId,
+            configuration.buildingId,
+            configuration.floorId,
+            configuration.zoneId,
+            configuration.spaceId,
+            configuration.sensorId,
+            visitorHeadcount,
+            assignedHeadcount,
+            activeFrom,
+            activeTill,
+          ];
+          headcounts.push({
+            id,
+            assignedHeadcount,
+            visitorHeadcount,
+          });
+          id += 1;
+          writer.writeRow(rowData.toString());
+        } else throw new Error("Could not set ActiveTill!");
+      }
+    });
     return headcounts;
   }
 }
