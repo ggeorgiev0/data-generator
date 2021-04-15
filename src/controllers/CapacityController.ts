@@ -33,18 +33,16 @@ export default class CapacityController {
     writer.createHeaders(Headers.CAPACITY);
     let id = 1;
     const capacities: ICapacity[] = [];
+    const activeFromDates = await TimeSlotController.getRandomActiveFrom(
+      reader
+    );
     console.log("Generating capacity data ...");
     /**
      * Iterate through all real estate configurations and
      * create capacity configurations for all sensors.
      */
-    this.relationalConfigurations.forEach(async (configuration) => {
+    this.relationalConfigurations.forEach((configuration) => {
       const capacity = this.calculateRandomCapacity();
-      console.log(capacity);
-
-      const activeFromDates = await TimeSlotController.getRandomActiveFrom(
-        reader
-      );
       const activeFrom =
         activeFromDates[random.int(0, activeFromDates.length - 1)];
       const activeTill = "";

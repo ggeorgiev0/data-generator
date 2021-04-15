@@ -9,7 +9,7 @@ export default class Writer {
   }
 
   public createHeaders(headers: string): void {
-    this.writeStream.write(`${headers}\n`, "utf-8");
+    this.writeRow(headers);
   }
 
   public writeRow(rowValues: string): void {
@@ -17,6 +17,7 @@ export default class Writer {
   }
 
   public static async createOutputFiles(): Promise<void> {
+    // Exception to the rule, because we need to iterate over an enumerator
     // eslint-disable-next-line no-restricted-syntax
     for (const workbook in Workbooks) {
       if (Object.prototype.hasOwnProperty.call(Workbooks, workbook)) {

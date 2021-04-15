@@ -1,4 +1,3 @@
-/* eslint-disable no-restricted-syntax */
 import random from "random";
 import ProgressBar from "progress";
 // import seedrandom from 'seedrandom';
@@ -21,10 +20,10 @@ export default class OccupancyController {
     private timeSlotConfigurations: ITimeSlotConfiguration[]
   ) {}
 
-  calculateRandomOccupancy(
+  private calculateRandomOccupancy(
     timeSlotId: number,
-    capacity: number | undefined,
-    headcount: number | undefined
+    capacity: number,
+    headcount: number
   ): number {
     let occupancy = 0;
     if (
@@ -55,52 +54,56 @@ export default class OccupancyController {
       total: this.timeSlotConfigurations.length,
     });
     let id = 1;
-    for (const timeSlotConfiguration of this.timeSlotConfigurations) {
-      for (const realEstateConfiguration of this.realEstateConfigurations) {
-        const index = this.realEstateConfigurations.indexOf(
-          realEstateConfiguration
-        );
-        let totalHeadcount = 0;
-        const headcount = this.headcounts[index];
-        if (headcount) {
-          if (headcount.assignedHeadcount && headcount.visitorHeadcount) {
-            totalHeadcount =
-              headcount.assignedHeadcount + headcount.visitorHeadcount;
+    this.timeSlotConfigurations.forEach((timeSlotConfiguration) => {
+      this.realEstateConfigurations.forEach(
+        (realEstateConfiguration, index) => {
+          const headcount = this.headcounts[index];
+          const currentCapacity = this.capacities[index];
+
+          let rowData: (number | string)[] = [];
+          if (
+            realEstateConfiguration.spaceTypeId !== undefined &&
+            realEstateConfiguration.departmentId !== undefined &&
+            currentCapacity !== undefined &&
+            headcount?.assignedHeadcount !== undefined &&
+            headcount.visitorHeadcount !== undefined
+          ) {
+            const occupancy = this.calculateRandomOccupancy(
+              timeSlotConfiguration.timeSlotId,
+              currentCapacity.capacity,
+              headcount?.assignedHeadcount + headcount?.visitorHeadcount
+            );
+
+            rowData = [
+              id,
+              realEstateConfiguration.regionId,
+              realEstateConfiguration.siteId,
+              realEstateConfiguration.buildingId,
+              realEstateConfiguration.floorId,
+              realEstateConfiguration.zoneId,
+              realEstateConfiguration.spaceId,
+              realEstateConfiguration.spaceTypeId,
+              realEstateConfiguration.sensorId,
+              realEstateConfiguration.departmentId,
+              timeSlotConfiguration.dateId,
+              timeSlotConfiguration.timeSlotId,
+              occupancy,
+            ];
           }
+
+          const v1Data = [...rowData, currentCapacity?.id, headcount?.id];
+          const v2Data = [
+            ...rowData,
+            currentCapacity?.capacity,
+            headcount?.assignedHeadcount,
+            headcount?.visitorHeadcount,
+          ];
+          writerOne.writeRow(v1Data.toString());
+          writerTwo.writeRow(v2Data.toString());
+          id += 1;
         }
-        const capacity = this.capacities[index];
-        const occupancy = this.calculateRandomOccupancy(
-          timeSlotConfiguration.timeSlotId,
-          this.capacities[index]?.capacity,
-          totalHeadcount
-        );
-        const rowData = [
-          id,
-          realEstateConfiguration.regionId,
-          realEstateConfiguration.siteId,
-          realEstateConfiguration.buildingId,
-          realEstateConfiguration.floorId,
-          realEstateConfiguration.zoneId,
-          realEstateConfiguration.spaceId,
-          realEstateConfiguration.spaceTypeId,
-          realEstateConfiguration.sensorId,
-          realEstateConfiguration.departmentId,
-          timeSlotConfiguration.dateId,
-          timeSlotConfiguration.timeSlotId,
-          occupancy,
-        ];
-        const v1Data = [...rowData, capacity?.id, headcount?.id];
-        const v2Data = [
-          ...rowData,
-          capacity?.capacity,
-          headcount?.assignedHeadcount,
-          headcount?.visitorHeadcount,
-        ];
-        writerOne.writeRow(v1Data.toString());
-        writerTwo.writeRow(v2Data.toString());
-        id += 1;
-      }
+      );
       bar.tick();
-    }
+    });
   }
 }

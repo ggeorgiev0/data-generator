@@ -49,11 +49,11 @@ export default class HeadcountController {
     writer.createHeaders(Headers.HEADCOUNT);
     let id = 1;
     const headcounts: IHeadcount[] = [];
+    const activeFromDates = await TimeSlotController.getRandomActiveFrom(
+      reader
+    );
     console.log("Generating headcount data...");
-    this.relationalConfigurations.forEach(async (configuration, index) => {
-      const activeFromDates = await TimeSlotController.getRandomActiveFrom(
-        reader
-      );
+    this.relationalConfigurations.forEach((configuration, index) => {
       const capacity = this.capacities[index]?.capacity;
       if (capacity) {
         const assignedHeadcount = this.calculateRandomHeadcount(capacity);
@@ -89,6 +89,7 @@ export default class HeadcountController {
         } else throw new Error("Could not set ActiveTill!");
       }
     });
+
     return headcounts;
   }
 }

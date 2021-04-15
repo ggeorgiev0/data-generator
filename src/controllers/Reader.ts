@@ -8,10 +8,12 @@ export default class Reader {
   }
 
   private getColumnHeaders(worksheet: Worksheet) {
-    const headers: (string | undefined)[] = [];
+    const headers: string[] = [];
     const row = worksheet.getRow(1);
     row.eachCell({ includeEmpty: true }, (cell, colNumber) => {
-      headers[colNumber] = cell.value?.toString();
+      if (cell.value) {
+        headers[colNumber] = cell.value?.toString();
+      }
     });
     return headers;
   }
@@ -29,17 +31,21 @@ export default class Reader {
   public getAllValuesForColumn(
     columnHeader: string,
     worksheet: Worksheet
-  ): (string | undefined)[] {
+  ): string[] {
     const { actualRowCount } = worksheet;
     const rows = worksheet.getRows(2, actualRowCount - 1);
-    const values: (string | undefined)[] = [];
+    const values: string[] = [];
     rows?.forEach((row: { number: number }, index) => {
       const value = this.getValueByCellLocation(
         columnHeader,
         row.number,
         worksheet
       );
-      values[index] = value?.toString();
+      if (value) {
+        values[index] = value?.toString();
+      } else {
+        values[index] = "";
+      }
     });
     return values;
   }

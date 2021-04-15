@@ -3,13 +3,12 @@ import Reader from "./Reader";
 import ITimeSlotConfiguration from "../interfaces/ITimeSlotConfiguration";
 
 export default class TimeSlotController {
-  public static async getRandomActiveFrom(
-    reader: Reader
-  ): Promise<(string | undefined)[]> {
+  public static async getRandomActiveFrom(reader: Reader): Promise<string[]> {
     const dateWorksheet = await reader.readWorkbook(Workbooks.DATE);
     const dates = reader.getAllValuesForColumn("FullDate", dateWorksheet);
     const halfOfAllDates = Math.ceil(dates.length / 2);
-    return dates.splice(0, halfOfAllDates);
+    const returnDates: string[] = dates.splice(0, halfOfAllDates);
+    return returnDates;
   }
 
   public static async createTimeSlotConfigurations(
