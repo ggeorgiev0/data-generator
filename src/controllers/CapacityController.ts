@@ -40,6 +40,8 @@ export default class CapacityController {
      */
     this.relationalConfigurations.forEach(async (configuration) => {
       const capacity = this.calculateRandomCapacity();
+      console.log(capacity);
+
       const activeFromDates = await TimeSlotController.getRandomActiveFrom(
         reader
       );

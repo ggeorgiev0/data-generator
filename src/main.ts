@@ -9,21 +9,28 @@ import Writer from "./controllers/Writer";
 async function main() {
   await Writer.createOutputFiles();
   const reader = new Reader();
-  const realEstate = new RealEstateController();
+  let realEstateController: RealEstateController | null = new RealEstateController();
 
   const timeSlotConfigurations = await TimeSlotController.createTimeSlotConfigurations(
     reader
   );
-  const realEstateConfigurations = await realEstate.createRelationalConfiguration();
+  const realEstateConfigurations = await realEstateController.createRelationalConfiguration();
 
-  const capacity = new CapacityController(realEstateConfigurations);
-  const capacities = await capacity.createCapacities();
+  let capacityController: CapacityController | null = new CapacityController(
+    realEstateConfigurations
+  );
+  const capacities = await capacityController.createCapacities();
 
-  const headcount = new HeadcountController(
+  let headcountController: HeadcountController | null = new HeadcountController(
     capacities,
     realEstateConfigurations
   );
-  const headcounts = await headcount.createHeadcounts();
+  const headcounts = await headcountController.createHeadcounts();
+
+  // Free up some memory
+  realEstateController = null;
+  capacityController = null;
+  headcountController = null;
 
   const occupancy = new OccupancyController(
     realEstateConfigurations,

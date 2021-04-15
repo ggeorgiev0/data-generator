@@ -49,6 +49,7 @@ export default class HeadcountController {
     writer.createHeaders(Headers.HEADCOUNT);
     let id = 1;
     const headcounts: IHeadcount[] = [];
+    console.log("Generating headcount data...");
     this.relationalConfigurations.forEach(async (configuration, index) => {
       const activeFromDates = await TimeSlotController.getRandomActiveFrom(
         reader
