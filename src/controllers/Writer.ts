@@ -2,10 +2,10 @@ import fs from "fs";
 import { Workbooks } from "../enums/workbookPaths";
 
 export default class Writer {
-  constructor(private filePath: fs.PathLike) {}
+  public writeStream: fs.WriteStream;
 
-  get writeStream(): fs.WriteStream {
-    return fs.createWriteStream(this.filePath);
+  constructor(private filePath: fs.PathLike) {
+    this.writeStream = fs.createWriteStream(this.filePath);
   }
 
   public createHeaders(headers: string): void {
