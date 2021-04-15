@@ -38,40 +38,37 @@ export default class CapacityController {
      * Iterate through all real estate configurations and
      * create capacity configurations for all sensors.
      */
-    // eslint-disable-next-line no-restricted-syntax
-    for (const configuration of this.relationalConfigurations) {
+    this.relationalConfigurations.forEach(async (configuration) => {
       const capacity = this.calculateRandomCapacity();
-      // eslint-disable-next-line no-await-in-loop
       const activeFromDates = await TimeSlotController.getRandomActiveFrom(
         reader
       );
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      const activeFrom = activeFromDates[
-        random.int(0, activeFromDates.length - 1)
-      ]!;
+      const activeFrom =
+        activeFromDates[random.int(0, activeFromDates.length - 1)];
       const activeTill = "";
-
-      const rowData: (number | string)[] = [
-        id,
-        configuration.regionId,
-        configuration.siteId,
-        configuration.buildingId,
-        configuration.floorId,
-        configuration.zoneId,
-        configuration.spaceId,
-        configuration.sensorId,
-        capacity,
-        activeFrom,
-        activeTill,
-      ];
-      capacities.push({
-        id,
-        capacity,
-      });
-      id += 1;
-      writer.writeRow(rowData.toString());
-    }
-
+      let rowData: (number | string)[] = [];
+      if (activeFrom) {
+        rowData = [
+          id,
+          configuration.regionId,
+          configuration.siteId,
+          configuration.buildingId,
+          configuration.floorId,
+          configuration.zoneId,
+          configuration.spaceId,
+          configuration.sensorId,
+          capacity,
+          activeFrom,
+          activeTill,
+        ];
+        capacities.push({
+          id,
+          capacity,
+        });
+        id += 1;
+        writer.writeRow(rowData.toString());
+      } else throw new Error("Could not set ActiveFrom date!");
+    });
     return capacities;
   }
 }
