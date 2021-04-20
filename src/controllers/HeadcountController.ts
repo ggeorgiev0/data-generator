@@ -52,7 +52,7 @@ export default class HeadcountController {
     const activeFromDates = await TimeSlotController.getRandomActiveFrom(
       reader
     );
-    console.log("Generating headcount data...");
+    console.log("Generating headcount data ...");
     this.relationalConfigurations.forEach((configuration, index) => {
       const capacity = this.capacities[index]?.capacity;
       if (capacity) {
