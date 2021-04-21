@@ -55,4 +55,5 @@ To run the script use the following command:
 ## Maintenance
 The script has a configured linter and prettier. Simply run ```npm run code:format``` to perform checks on the script and make sure that it is formatted properly.
 
+While developing, to run the TypeScript compiler in watch mode run `tsc -w`.
 ***

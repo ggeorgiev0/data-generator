@@ -3,6 +3,13 @@ import Reader from "./Reader";
 import ITimeSlotConfiguration from "../interfaces/ITimeSlotConfiguration";
 
 export default class TimeSlotController {
+  /**
+   * Used to generate versioning for all capacity and headcount records.
+   * Basically the date from which the records were set to active.
+   * If there is no active till then the record is still active.
+   * @param reader - The .csv reader class instance.
+   * @returns Half of the array of possible dates - the ones that are at the start of the data generation period, set in dimDate.csv.
+   */
   public static async getRandomActiveFrom(reader: Reader): Promise<string[]> {
     const dateWorksheet = await reader.readWorkbook(Workbooks.DATE);
     const dates = reader.getAllValuesForColumn("FullDate", dateWorksheet);

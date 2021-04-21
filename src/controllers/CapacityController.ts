@@ -14,6 +14,10 @@ import { Config } from "../enums/config";
 export default class CapacityController {
   constructor(private relationalConfigurations: IRealEstateConfiguration[]) {}
 
+  /**
+   * Runs for each sensor in a real estate configuration
+   * @returns a random capacity based on the configuration.
+   */
   public calculateRandomCapacity(): number {
     let capacity = 1;
     // 20% of the time capacity will be bigger than the minimum
@@ -27,8 +31,10 @@ export default class CapacityController {
     return capacity;
   }
 
-  public async createCapacities(): Promise<ICapacity[]> {
-    const reader = new Reader();
+  /**
+   * @returns an array of capacities
+   */
+  public async createCapacities(reader: Reader): Promise<ICapacity[]> {
     const writer = new Writer(Workbooks.CAPACITY);
     writer.createHeaders(Headers.CAPACITY);
     let id = 1;
@@ -45,6 +51,7 @@ export default class CapacityController {
       const capacity = this.calculateRandomCapacity();
       const activeFrom =
         activeFromDates[random.int(0, activeFromDates.length - 1)];
+      // Active till is intentionally left empty, so that there is no complicated versioning of the capacities.
       const activeTill = "";
       let rowData: (number | string)[] = [];
       if (activeFrom) {

@@ -18,6 +18,10 @@ export default class HeadcountController {
     private relationalConfigurations: IRealEstateConfiguration[]
   ) {}
 
+  /**
+   * Runs for each sensor in a real estate configuration
+   * @returns a random assigned headcount based on the configuration.
+   */
   private calculateRandomHeadcount(capacity: number): number {
     let headcount = 1;
     if (capacity) {
@@ -32,6 +36,10 @@ export default class HeadcountController {
     return headcount;
   }
 
+  /**
+   * Runs for each sensor in a real estate configuration
+   * @returns a random visitor headcount based on the configuration.
+   */
   private calculateRandomVisitorHeadcount(
     capacity: number,
     employeeHeadcount: number
@@ -43,8 +51,10 @@ export default class HeadcountController {
     return visitorHeadcount;
   }
 
-  public async createHeadcounts(): Promise<IHeadcount[]> {
-    const reader = new Reader();
+  /**
+   * @returns an array of headcounts
+   */
+  public async createHeadcounts(reader: Reader): Promise<IHeadcount[]> {
     const writer = new Writer(Workbooks.HEADCOUNT);
     writer.createHeaders(Headers.HEADCOUNT);
     let id = 1;
@@ -63,6 +73,7 @@ export default class HeadcountController {
         );
         const activeFrom =
           activeFromDates[random.int(0, activeFromDates.length - 1)];
+        // Active till is intentionally left empty, so that there is no complicated versioning of the headcounts.
         const activeTill = "";
         if (activeFrom) {
           const rowData: (number | string)[] = [

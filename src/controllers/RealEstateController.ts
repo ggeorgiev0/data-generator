@@ -10,10 +10,12 @@ import IRelationalStructure from "../interfaces/IRelationalStructure";
 export default class RealEstateController {
   private readJsonConfiguration(): Promise<IRelationalStructure> {
     let pathToJson: fs.PathLike;
+    // The third provided argument when starting the program should be the path to the relational structure.
     if (!process.argv[2]) {
       throw new Error(
         "The path to the json file, containing the relational structure was not provided!"
       );
+      // This might be a useless check, because command line arguments are always strings.
     } else if (typeof process.argv[2] !== "string") {
       throw new Error(
         "Invalid path for the relational structure was provided."
